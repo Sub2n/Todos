@@ -1,0 +1,8 @@
+{
+  // ESLINT
+  "eslint.validate": [
+    "javascript",
+    "html"
+  ],
+  "eslint.autoFixOnSave": true
+}
