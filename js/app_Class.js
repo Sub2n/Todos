@@ -10,14 +10,14 @@ class TodoList {
     this.$completedTodos = document.querySelector('.completed-todos');
     this.$activeTodos = document.querySelector('.active-todos');
 
-    this.$inputTodo.onkeyup = this.addTodo;
-    this.$todoList.onchange = this.completeTodo;
-    this.$todoList.onclick = this.removeTodo;
-    this.$completedAll.onclick = this.completeAllTodo;
-    this.$clearCompleted.onclick = this.clearCompletedTodo;
+    this.$inputTodo.onkeyup = this.addTodo.bind(this);
+    this.$todoList.onchange = this.completeTodo.bind(this);
+    this.$todoList.onclick = this.removeTodo.bind(this);
+    this.$completedAll.onclick = this.completeAllTodo.bind(this);
+    this.$clearCompleted.onclick = this.clearCompletedTodo.bind(this);
   }
 
-  render = () => {
+  render() {
     let html = '';
     let completedTodo = 0;
     this.todos.forEach(({ id, content, completed }) => {
@@ -36,11 +36,11 @@ class TodoList {
     this.$activeTodos.textContent = this.todos.length - completedTodo;
   }
 
-  generateId = () => {
+  generateId() {
     return this.todos.length ? Math.max(...this.todos.map(todo => todo.id)) + 1 : 1;
   }
 
-  addTodo = e => {
+  addTodo(e) {
     const content = this.$inputTodo.value.trim();
     if (content === '' || e.keyCode !== 13) return;
     this.todos = [{ id: this.generateId(), content, completed: false }, ...this.todos];
@@ -48,24 +48,24 @@ class TodoList {
     this.render();
   }
 
-  completeTodo = e => {
+  completeTodo(e) {
     this.todos = this.todos.map(todo => (todo.id === +e.target.parentNode.id ? (Object.assign({}, todo, { completed: !todo.completed })) : todo));
     this.render();
   }
 
-  removeTodo = e => {
+  removeTodo(e) {
     if (e.target.classList.contains('remove-todo')) {
       this.todos = this.todos.filter(todo => todo.id !== +e.target.parentNode.id);
       this.render();
     }
   }
 
-  completeAllTodo = e => {
+  completeAllTodo(e) {
     this.todos = this.todos.map(todo => Object.assign({}, todo, { completed: e.target.checked }));
     this.render();
   }
 
-  clearCompletedTodo = e => {
+  clearCompletedTodo() {
     this.todos = this.todos.filter(todo => !todo.completed);
     this.render();
   }
