@@ -73,6 +73,3 @@ class TodoList {
 
 const todoList = new TodoList();
 todoList.render();
-
-const todoList1 = new TodoList([{ id: 1, content: 1234, completed: false }]);
-todoList1.render();
