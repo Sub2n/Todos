@@ -11,7 +11,8 @@
   let menuFlag = 'all';
   let todos = [];
 
-  function render() {
+  function render(resTodo) {
+    if (resTodo) todos = resTodo;
     let html = '';
 
     function generateHTML(todoList) {
@@ -39,7 +40,7 @@
 
   function getTodos() {
     fetch('http://localhost:9000/todos')
-      .then((res) => { todos = res; return res.json(); })
+      .then(res => res.json())
       .then(render)
       .catch(console.log);
   }
@@ -53,32 +54,56 @@
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({ id: generateId(), content, completed: false })
-    }).then((res) => { todos = res; return res.json(); })
+    }).then(res => res.json())
       .then(render)
       .catch(console.log);
   }
 
   function completeTodo(targetID) {
-    todos = todos.map(todo => (todo.id === +targetID ? (Object.assign({}, todo, { completed: !todo.completed })) : todo));
-    render();
+    todos.forEach((todo) => {
+      if (todo.id === +targetID) {
+        fetch(`http://localhost:9000/todos/${todo.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ completed: !todo.completed })
+        }).then(res => res.json())
+          .then(render)
+          .catch(console.log);
+      }
+    });
   }
 
   function removeTodo(targetID) {
-    todos = todos.filter(todo => todo.id !== +targetID);
-    render();
+    todos.forEach((todo) => {
+      if (todo.id !== +targetID) {
+        fetch(`http://localhost:9000/todos/${todo.id}`, {
+          method: 'DELETE'
+        }).then(res => res.json())
+          .then(render)
+          .catch(console.log);
+      }
+    });
   }
 
   function completeAllTodos(complete) {
-    todos = todos.map(todo => Object.assign({}, todo, { completed: complete.checked }));
-    render();
+    fetch('http://localhost:9000/todos', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ completed: complete.checked })
+    }).then(res => res.json())
+      .then(render)
+      .catch(console.log);
   }
 
   function clearCompletedTodos() {
-    todos = todos.filter(todo => !todo.completed);
-    render();
+    fetch('http://localhost:9000/todos/completed', {
+      method: 'DELETE'
+    }).then(res => res.json())
+      .then(render)
+      .catch(console.log);
   }
 
-  window.onload(() => { getTodos(); });
+  window.onload = () => { getTodos(); };
 
   $inputTodo.addEventListener('keyup', (e) => {
     const content = $inputTodo.value.trim();
