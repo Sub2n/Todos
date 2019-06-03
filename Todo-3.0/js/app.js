@@ -39,7 +39,7 @@
   }
 
   function getTodos() {
-    fetch('http://localhost:9000/todos')
+    fetch('http://localhost:4500/todos')
       .then(res => res.json())
       .then(render)
       .catch(console.log);
@@ -50,7 +50,7 @@
   }
 
   function addTodo(content) {
-    fetch('http://localhost:9000/todos', {
+    fetch('http://localhost:4500/todos', {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({ id: generateId(), content, completed: false })
@@ -62,7 +62,7 @@
   function completeTodo(targetID) {
     todos.forEach((todo) => {
       if (todo.id === +targetID) {
-        fetch(`http://localhost:9000/todos/${todo.id}`, {
+        fetch(`http://localhost:4500/todos/${todo.id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ completed: !todo.completed })
@@ -76,7 +76,7 @@
   function removeTodo(targetID) {
     todos.forEach((todo) => {
       if (todo.id !== +targetID) {
-        fetch(`http://localhost:9000/todos/${todo.id}`, {
+        fetch(`http://localhost:4500/todos/${todo.id}`, {
           method: 'DELETE'
         }).then(res => res.json())
           .then(render)
@@ -86,7 +86,7 @@
   }
 
   function completeAllTodos(complete) {
-    fetch('http://localhost:9000/todos', {
+    fetch('http://localhost:4500/todos', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ completed: complete.checked })
@@ -96,7 +96,7 @@
   }
 
   function clearCompletedTodos() {
-    fetch('http://localhost:9000/todos/completed', {
+    fetch('http://localhost:4500/todos/completed', {
       method: 'DELETE'
     }).then(res => res.json())
       .then(render)
