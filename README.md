@@ -14,3 +14,6 @@ Todos-1.0 버전
   
 ## 190604 (화)
 Todos-3.0 버전
+- MongoDB 서버 연동
+- server에 요청하는 fetch와 cient view 담당하는 render 분리
+- spinner 
