@@ -8,6 +8,7 @@
   const $completedTodos = document.querySelector('.completed-todos');
   const $activeTodos = document.querySelector('.active-todos');
   const $nav = document.querySelector('.nav');
+  const $spinner = document.querySelector('.spinner');
   let menuFlag = 'all';
   let todos = [];
 
@@ -36,11 +37,17 @@
     $todos.innerHTML = html;
     $completedTodos.textContent = todos.filter(({ completed }) => completed).length;
     $activeTodos.textContent = todos.filter(({ completed }) => !completed).length;
+    $spinner.classList.remove('show');
+  }
+
+  function getResponse(url, payload) {
+    $spinner.classList.add('show');
+    return (fetch(url, payload)
+      .then(res => res.json()));
   }
 
   function getTodos() {
-    fetch('./todos')
-      .then(res => res.json())
+    getResponse('/todos')
       .then(render)
       .catch(console.log);
   }
@@ -50,52 +57,47 @@
   }
 
   function addTodo(content) {
-    fetch('/todos', {
+    getResponse('/todos', {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({ id: generateId(), content, completed: false })
-    }).then(res => res.json())
-      .then(render)
+    }).then(render)
       .catch(console.log);
   }
 
   function completeTodo(targetID) {
     todos.forEach(todo => {
       if (todo.id === +targetID) {
-        fetch(`/todos/${todo.id}`, {
+        getResponse(`/todos/${todo.id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ completed: !todo.completed })
-        }).then(res => res.json())
-          .then(render)
+        }).then(render)
           .catch(console.log);
       }
     });
   }
 
   function removeTodo(targetID) {
-    fetch(`/todos/${targetID}`, {
+    getResponse(`/todos/${targetID}`, {
       method: 'DELETE'
-    }).then(res => res.json())
-      .then(render)
+    }).then(render)
       .catch(console.log);
   }
 
   function completeAllTodos(complete) {
-    fetch('/todos', {
+    getResponse('/todos', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ completed: complete.checked })
-    }).then(res => res.json())
-      .then(render)
+    }).then(render)
       .catch(console.log);
   }
 
   function clearCompletedTodos() {
-    fetch('/todos/completed', {
+    getResponse('/todos/completed', {
       method: 'DELETE'
-    }).then(res => res.json())
-      .then(render)
+    }).then(render)
       .catch(console.log);
   }
 

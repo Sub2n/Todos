@@ -10273,6 +10273,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   var $completedTodos = document.querySelector('.completed-todos');
   var $activeTodos = document.querySelector('.active-todos');
   var $nav = document.querySelector('.nav');
+  var $spinner = document.querySelector('.spinner');
   var menuFlag = 'all';
   var todos = [];
 
@@ -10309,12 +10310,18 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var completed = _ref4.completed;
       return !completed;
     }).length;
+    $spinner.classList.remove('show');
+  }
+
+  function getResponse(url, payload) {
+    $spinner.classList.add('show');
+    return fetch(url, payload).then(function (res) {
+      return res.json();
+    });
   }
 
   function getTodos() {
-    fetch('./todos').then(function (res) {
-      return res.json();
-    }).then(render)["catch"](console.log);
+    getResponse('/todos').then(render)["catch"](console.log);
   }
 
   function generateId() {
@@ -10324,7 +10331,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   }
 
   function addTodo(content) {
-    fetch('/todos', {
+    getResponse('/todos', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -10334,15 +10341,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         content: content,
         completed: false
       })
-    }).then(function (res) {
-      return res.json();
     }).then(render)["catch"](console.log);
   }
 
   function completeTodo(targetID) {
     todos.forEach(function (todo) {
       if (todo.id === +targetID) {
-        fetch("/todos/".concat(todo.id), {
+        getResponse("/todos/".concat(todo.id), {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json'
@@ -10350,23 +10355,19 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           body: JSON.stringify({
             completed: !todo.completed
           })
-        }).then(function (res) {
-          return res.json();
         }).then(render)["catch"](console.log);
       }
     });
   }
 
   function removeTodo(targetID) {
-    fetch("/todos/".concat(targetID), {
+    getResponse("/todos/".concat(targetID), {
       method: 'DELETE'
-    }).then(function (res) {
-      return res.json();
     }).then(render)["catch"](console.log);
   }
 
   function completeAllTodos(complete) {
-    fetch('/todos', {
+    getResponse('/todos', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -10374,16 +10375,12 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       body: JSON.stringify({
         completed: complete.checked
       })
-    }).then(function (res) {
-      return res.json();
     }).then(render)["catch"](console.log);
   }
 
   function clearCompletedTodos() {
-    fetch('/todos/completed', {
+    getResponse('/todos/completed', {
       method: 'DELETE'
-    }).then(function (res) {
-      return res.json();
     }).then(render)["catch"](console.log);
   }
 
