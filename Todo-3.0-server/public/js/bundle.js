@@ -10345,19 +10345,18 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   }
 
   function completeTodo(targetID) {
-    todos.forEach(function (todo) {
-      if (todo.id === +targetID) {
-        getResponse("/todos/".concat(todo.id), {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            completed: !todo.completed
-          })
-        }).then(render)["catch"](console.log);
-      }
+    var completed = todos.find(function (todo) {
+      return todo.id === +targetID;
     });
+    getResponse("/todos/".concat(targetID), {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        completed: !completed
+      })
+    }).then(render)["catch"](console.log);
   }
 
   function removeTodo(targetID) {
@@ -10384,10 +10383,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }).then(render)["catch"](console.log);
   }
 
-  window.onload = function () {
-    getTodos();
-  };
-
+  window.onload = getTodos;
   $inputTodo.addEventListener('keyup', function (e) {
     var content = $inputTodo.value.trim();
     if (content === '' || e.keyCode !== 13) return;

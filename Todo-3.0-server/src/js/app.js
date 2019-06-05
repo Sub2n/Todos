@@ -9,6 +9,7 @@
   const $activeTodos = document.querySelector('.active-todos');
   const $nav = document.querySelector('.nav');
   const $spinner = document.querySelector('.spinner');
+
   let menuFlag = 'all';
   let todos = [];
 
@@ -66,16 +67,14 @@
   }
 
   function completeTodo(targetID) {
-    todos.forEach(todo => {
-      if (todo.id === +targetID) {
-        getResponse(`/todos/${todo.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ completed: !todo.completed })
-        }).then(render)
-          .catch(console.log);
-      }
-    });
+    const completed = todos.find(todo => todo.id === +targetID);
+
+    getResponse(`/todos/${targetID}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ completed: !completed })
+    }).then(render)
+      .catch(console.log);
   }
 
   function removeTodo(targetID) {
@@ -101,7 +100,7 @@
       .catch(console.log);
   }
 
-  window.onload = () => { getTodos(); };
+  window.onload = getTodos;
 
   $inputTodo.addEventListener('keyup', e => {
     const content = $inputTodo.value.trim();
