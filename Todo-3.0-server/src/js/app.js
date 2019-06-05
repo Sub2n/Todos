@@ -15,25 +15,21 @@
 
   function render(resTodo) {
     if (resTodo) todos = resTodo;
+
+    const filterdTodos = todos.filter(({ completed }) => {
+      if (menuFlag === 'all') return true;
+      return menuFlag === 'active' ? !completed : completed;
+    });
+
     let html = '';
 
-    function generateHTML(todoList) {
-      let newHtml = '';
-      todoList.forEach(({ id, content, completed }) => {
-        newHtml += `<li id="${id}" class="todo-item">
+    filterdTodos.forEach(({ id, content, completed }) => {
+      html += `<li id="${id}" class="todo-item">
         <input class="custom-checkbox" type="checkbox" id="ck-${id}" ${completed ? 'checked' : ''}>
         <label for="ck-${id}">${content}</label>
         <i class="remove-todo far fa-times-circle"></i>
         </li>`;
-      });
-      return newHtml;
-    }
-
-    if (menuFlag === 'all') {
-      html = generateHTML(todos);
-    } else {
-      html = generateHTML(todos.filter(({ completed }) => (menuFlag === 'active' ? !completed : completed)));
-    }
+    });
 
     $todos.innerHTML = html;
     $completedTodos.textContent = todos.filter(({ completed }) => completed).length;
