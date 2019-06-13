@@ -5,6 +5,7 @@
 - 완료된 Todo와 완료 안 된 Todo 관리
 - 전체 선택 완료 / 해제
 - 완료된 Todo 삭제
+
 ## 190527 (월)
 Todos-1.0 버전
 - IIFE로 감싸서 그냥 만들었음
@@ -17,3 +18,8 @@ Todos-3.0 버전
 - MongoDB 서버 연동
 - server에 요청하는 fetch와 cient view 담당하는 render 분리
 - spinner 
+
+## 190613 (목)
+Todos-4.0 버전
+- Angular로 다시 구현
+- Class화
