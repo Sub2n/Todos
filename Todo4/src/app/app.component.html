@@ -1,21 +1,50 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Todo 4.0</title>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Todos</h1>
+    <div class="ver">4.0</div>
 
-<router-outlet></router-outlet>
+    <input class="input-todo" placeholder="What needs to be done?" autofocus (keyup.enter)="addTodo(input)" #input>
+    
+    <div class="spinner"><div></div></div>
+
+    <ul class="nav">
+      <li id="all" [class.active]="menu === all.id" (click)="checkMenu(all.id)" #all>All</li>
+      <li id="active" [class.active]="menu === active.id" (click)="checkMenu(active.id)" #active>Active</li>
+      <li id="completed" [class.active]="menu === completed.id" (click)="checkMenu(completed.id)" #completed>Completed</li>
+    </ul>
+
+    <ul class="todos">
+      <li id="myId" class="todo-item" *ngFor="let todo of showTodos">
+        <input class="custom-checkbox" type="checkbox" id="ck-{{todo.id}}" [checked]=todo.completed (change)="completeTodo(todo.id)">
+        <label for="ck-{{todo.id}}">{{todo.content}}</label>
+        <i class="remove-todo far fa-times-circle" (click)="removeTodo(todo.id)"></i>
+      </li>
+      <!-- <li id="myId" class="todo-item">
+        <input class="custom-checkbox" type="checkbox" id="ck-myId">
+        <label for="ck-myId">HTML</label>
+        <i class="remove-todo far fa-times-circle"></i>
+      </li> -->
+    </ul>
+    <div class="footer">
+      <div class="complete-all">
+        <input class="custom-checkbox" type="checkbox" id="ck-complete-all" (change)="completeAllTodos(checkbox.checked)" #checkbox>
+        <label for="ck-complete-all">Mark all as complete</label>
+      </div>
+      <div class="clear-completed">
+        <button class="btn" (click)="removeCompletedTodos()">Clear completed (<span class="completed-todos">{{completedTodos()}}</span>)</button>
+        <strong class="active-todos">{{uncompletedTodos()}}</strong> items left
+      </div>
+    </div>
+    <pre>{{Todos | json}}</pre>
+  </div>
+</body>
+</html>
