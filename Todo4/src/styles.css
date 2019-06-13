@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+  /* font-size: 16px; */
+  font-size: 0.9em;
+  color: #58666e;
+  background-color: #f0f3f4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

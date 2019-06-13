@@ -1,50 +1,41 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Todo 4.0</title>
-</head>
-<body>
-  <div class="container">
-    <h1 class="title">Todos</h1>
-    <div class="ver">4.0</div>
 
-    <input class="input-todo" placeholder="What needs to be done?" autofocus (keyup.enter)="addTodo(input)" #input>
-    
-    <div class="spinner"><div></div></div>
+<div class="container">
+  <h1 class="title">Todos</h1>
+  <div class="ver">4.0</div>
 
-    <ul class="nav">
-      <li id="all" [class.active]="menu === all.id" (click)="checkMenu(all.id)" #all>All</li>
-      <li id="active" [class.active]="menu === active.id" (click)="checkMenu(active.id)" #active>Active</li>
-      <li id="completed" [class.active]="menu === completed.id" (click)="checkMenu(completed.id)" #completed>Completed</li>
-    </ul>
+  <input class="input-todo" placeholder="What needs to be done?" autofocus (keyup.enter)="addTodo(input)" #input>
+  
+  <div class="spinner"><div></div></div>
 
-    <ul class="todos">
-      <li id="myId" class="todo-item" *ngFor="let todo of showTodos">
-        <input class="custom-checkbox" type="checkbox" id="ck-{{todo.id}}" [checked]=todo.completed (change)="completeTodo(todo.id)">
-        <label for="ck-{{todo.id}}">{{todo.content}}</label>
-        <i class="remove-todo far fa-times-circle" (click)="removeTodo(todo.id)"></i>
-      </li>
-      <!-- <li id="myId" class="todo-item">
-        <input class="custom-checkbox" type="checkbox" id="ck-myId">
-        <label for="ck-myId">HTML</label>
-        <i class="remove-todo far fa-times-circle"></i>
-      </li> -->
-    </ul>
-    <div class="footer">
-      <div class="complete-all">
-        <input class="custom-checkbox" type="checkbox" id="ck-complete-all" (change)="completeAllTodos(checkbox.checked)" #checkbox>
-        <label for="ck-complete-all">Mark all as complete</label>
-      </div>
-      <div class="clear-completed">
-        <button class="btn" (click)="removeCompletedTodos()">Clear completed (<span class="completed-todos">{{completedTodos()}}</span>)</button>
-        <strong class="active-todos">{{uncompletedTodos()}}</strong> items left
-      </div>
+  <ul class="nav">
+    <li id="all" [class.active]="menu === all.id" (click)="checkMenu(all.id)" #all>All</li>
+    <li id="active" [class.active]="menu === active.id" (click)="checkMenu(active.id)" #active>Active</li>
+    <li id="completed" [class.active]="menu === completed.id" (click)="checkMenu(completed.id)" #completed>Completed</li>
+  </ul>
+
+  <ul class="todos">
+    <li id="myId" class="todo-item" *ngFor="let todo of showTodos">
+      <input class="custom-checkbox" type="checkbox" id="ck-{{todo.id}}" [checked]=todo.completed (change)="completeTodo(todo.id)">
+      <label for="ck-{{todo.id}}">{{todo.content}}</label>
+      <i class="remove-todo far fa-times-circle" (click)="removeTodo(todo.id)"></i>
+    </li>
+    <!-- <li id="myId" class="todo-item">
+      <input class="custom-checkbox" type="checkbox" id="ck-myId">
+      <label for="ck-myId">HTML</label>
+      <i class="remove-todo far fa-times-circle"></i>
+    </li> -->
+  </ul>
+  <div class="footer">
+    <div class="complete-all">
+      <input class="custom-checkbox" type="checkbox" id="ck-complete-all" (change)="completeAllTodos(checkbox.checked)" #checkbox>
+      <label for="ck-complete-all">Mark all as complete</label>
     </div>
-    <pre>{{Todos | json}}</pre>
+    <div class="clear-completed">
+      <button class="btn" (click)="removeCompletedTodos()">Clear completed (<span class="completed-todos">{{completedTodos()}}</span>)</button>
+      <strong class="active-todos">{{uncompletedTodos()}}</strong> items left
+    </div>
   </div>
-</body>
-</html>
+  <!-- <pre>{{Todos | json}}</pre> -->
+</div>
+
