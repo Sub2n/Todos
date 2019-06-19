@@ -10,6 +10,12 @@ import { Todo } from '../todo.interface';
 export class TodosComponent implements OnInit {
   public todos: Todo[];
 
+  public states = [
+    { state: 'all', title: 'All' },
+    { state: 'active', title: 'Active' },
+    { state: 'completed', title: 'Completed' }
+  ];
+
   public state: string;
 
   constructor(private todosService: TodosService) {}
@@ -52,17 +58,17 @@ export class TodosComponent implements OnInit {
     this.todos = this.todosService.Todos;
   }
 
-  completedNums() {
-    return this.todos.filter(({ completed }) => completed).length;
-  }
-
-  uncompletedNums() {
-    return this.todos.filter(({ completed }) => !completed).length;
-  }
-
   addEvent(input: HTMLInputElement) {
     if (input.value !== '') this.addTodo(input.value.trim());
     input.value = '';
+  }
+
+  get completedNums() {
+    return this.todos.filter(({ completed }) => completed).length;
+  }
+
+  get uncompletedNums() {
+    return this.todos.filter(({ completed }) => !completed).length;
   }
 
   get Todos() {

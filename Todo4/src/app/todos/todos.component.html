@@ -5,9 +5,8 @@
   <input class="input-todo" placeholder="What needs to be done?" autofocus (keyup.enter)="addEvent($event.target)">
 
   <ul class="nav" (click)="activeState($event.target.id)">
-    <li id="all" [class.active]="state == all.id" #all>All</li>
-    <li id="active" [class.active]="state == active.id" #active>Active</li>
-    <li id="completed" [class.active]="state == completed.id" #completed>Completed</li>
+    <li id="{{status.state}}" *ngFor="let status of states" [class.active]="state == status.state" #status.state>
+      {{status.title}}</li>
   </ul>
 
   <ul class="todos">
@@ -25,8 +24,8 @@
     </div>
     <div class="clear-completed">
       <button class="btn" (click)="removeCompleted()">Clear completed (<span
-          class="completed-todos">{{completedNums()}}</span>)</button>
-      <strong class="active-todos">{{uncompletedNums()}}</strong> items left
+          class="completed-todos">{{completedNums}}</span>)</button>
+      <strong class="active-todos">{{uncompletedNums}}</strong> items left
     </div>
   </div>
 </div>
