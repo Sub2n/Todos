@@ -18,10 +18,10 @@ export class TodosComponent implements OnInit {
 
   public state: string;
 
-  constructor(private todosService: TodosService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.todos = this.todosService.Todos;
+    this.todos = [];
     this.state = 'all';
   }
 
@@ -34,28 +34,23 @@ export class TodosComponent implements OnInit {
   }
 
   addTodo(content: string) {
-    this.todosService.Todos = [{ id: this.generateID(), content, completed: false }, ...this.todos];
-    this.todos = this.todosService.Todos;
+    this.todos = [{ id: this.generateID(), content, completed: false }, ...this.todos];
   }
 
   toggleTodo(id: number) {
-    this.todosService.Todos = this.todos.map(todo => (todo.id === id ? { ...todo, completed: !todo.completed } : todo));
-    this.todos = this.todosService.Todos;
+    this.todos = this.todos.map(todo => (todo.id === id ? { ...todo, completed: !todo.completed } : todo));
   }
 
   removeTodo(id: number) {
-    this.todosService.Todos = this.todos.filter(todo => todo.id !== id);
-    this.todos = this.todosService.Todos;
+    this.todos = this.todos.filter(todo => todo.id !== id);
   }
 
   completeAll(checked: boolean) {
-    this.todosService.Todos = this.todos.map(todo => ({ ...todo, completed: checked }));
-    this.todos = this.todosService.Todos;
+    this.todos = this.todos.map(todo => ({ ...todo, completed: checked }));
   }
 
   removeCompleted() {
-    this.todosService.Todos = this.todos.filter(({ completed }) => !completed);
-    this.todos = this.todosService.Todos;
+    this.todos = this.todos.filter(({ completed }) => !completed);
   }
 
   addEvent(input: HTMLInputElement) {
