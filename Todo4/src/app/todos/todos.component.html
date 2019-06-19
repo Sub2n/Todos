@@ -24,7 +24,8 @@
       <label for="ck-complete-all">Mark all as complete</label>
     </div>
     <div class="clear-completed">
-      <button class="btn">Clear completed (<span class="completed-todos">{{completedNums()}}</span>)</button>
+      <button class="btn" (click)="removeCompleted()">Clear completed (<span
+          class="completed-todos">{{completedNums()}}</span>)</button>
       <strong class="active-todos">{{uncompletedNums()}}</strong> items left
     </div>
   </div>

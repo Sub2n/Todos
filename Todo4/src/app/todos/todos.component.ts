@@ -47,6 +47,11 @@ export class TodosComponent implements OnInit {
     this.todos = this.todosService.Todos;
   }
 
+  removeCompleted() {
+    this.todosService.Todos = this.todos.filter(({ completed }) => !completed);
+    this.todos = this.todosService.Todos;
+  }
+
   completedNums() {
     return this.todos.filter(({ completed }) => completed).length;
   }
@@ -56,7 +61,7 @@ export class TodosComponent implements OnInit {
   }
 
   addEvent(input: HTMLInputElement) {
-    this.addTodo(input.value);
+    if (input.value !== '') this.addTodo(input.value.trim());
     input.value = '';
   }
 }

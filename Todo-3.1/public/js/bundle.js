@@ -10262,157 +10262,207 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-/* eslint-disable max-len */
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/* eslint-disable func-names */
-(function () {
-  var $inputTodo = document.querySelector('.input-todo');
-  var $todos = document.querySelector('.todos');
-  var $completeAll = document.querySelector('#ck-complete-all');
-  var $clearCompleted = document.querySelector('.clear-completed');
-  var $completedTodos = document.querySelector('.completed-todos');
-  var $activeTodos = document.querySelector('.active-todos');
-  var $nav = document.querySelector('.nav');
-  var $spinner = document.querySelector('.spinner');
-  var menuFlag = 'all';
-  var todos = [];
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  function render(resTodo) {
-    if (resTodo) todos = resTodo;
-    var html = '';
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-    function generateHTML(todoList) {
-      var newHtml = '';
-      todoList.forEach(function (_ref) {
-        var id = _ref.id,
-            content = _ref.content,
-            completed = _ref.completed;
-        newHtml += "<li id=\"".concat(id, "\" class=\"todo-item\">\n        <input class=\"custom-checkbox\" type=\"checkbox\" id=\"ck-").concat(id, "\" ").concat(completed ? 'checked' : '', ">\n        <label for=\"ck-").concat(id, "\">").concat(content, "</label>\n        <i class=\"remove-todo far fa-times-circle\"></i>\n        </li>");
+var TodoList =
+/*#__PURE__*/
+function () {
+  function TodoList() {
+    var _this = this;
+
+    _classCallCheck(this, TodoList);
+
+    this.todos = [];
+    this.$inputTodo = document.querySelector('.input-todo');
+    this.$todos = document.querySelector('.todos');
+    this.$completeAll = document.querySelector('#ck-complete-all');
+    this.$clearCompleted = document.querySelector('.clear-completed');
+    this.$completedTodos = document.querySelector('.completed-todos');
+    this.$activeTodos = document.querySelector('.active-todos');
+    this.$nav = document.querySelector('.nav');
+    this.$spinner = document.querySelector('.spinner');
+    this.state = 'all';
+
+    this.getResponse = function (url, payload) {
+      _this.$spinner.classList.add('show');
+
+      return fetch(url, payload).then(function (res) {
+        return res.json();
       });
-      return newHtml;
+    };
+
+    this.getTodos = function () {
+      _this.getResponse('/todos').then(_this.render)["catch"](console.error);
+    };
+
+    this.generateId = function () {
+      return _this.todos.length ? Math.max.apply(Math, _toConsumableArray(_this.todos.map(function (todo) {
+        return todo.id;
+      }))) + 1 : 1;
+    };
+
+    this.addTodo = function (content) {
+      _this.getResponse('/todos', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: _this.generateId(),
+          content: content,
+          completed: false
+        })
+      }).then(_this.render)["catch"](console.error);
+    };
+
+    this.completeTodo = function (id) {
+      var completed = _this.todos.find(function (todo) {
+        return todo.id === +id;
+      });
+
+      _this.getResponse("/todos/".concat(id), {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          completed: !completed
+        })
+      }).then(_this.render)["catch"](console.error);
+    };
+
+    this.removeTodo = function (id) {
+      _this.getResponse("/todos/".concat(id), {
+        method: 'DELETE'
+      }).then(_this.render)["catch"](console.error);
+    };
+
+    this.completeAllTodos = function (checked) {
+      _this.getResponse('/todos', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          completed: checked
+        })
+      }).then(_this.render)["catch"](console.error);
+    };
+
+    this.clearCompletedTodos = function () {
+      _this.getResponse('/todos/completed', {
+        method: 'DELETE'
+      }).then(_this.render)["catch"](console.error);
+    };
+
+    this.addEvent = function (e) {
+      var content = _this.$inputTodo.value.trim();
+
+      if (content === '' || e.keyCode !== 13) {
+        return;
+      }
+
+      _this.addTodo(content);
+
+      _this.$inputTodo.value = '';
+    };
+
+    this.completeEvent = function (e) {
+      var target = e.target;
+
+      _this.completeTodo(+target.parentElement.id);
+    };
+
+    this.removeEvent = function (e) {
+      var target = e.target;
+
+      if (!target.classList.contains('remove-todo')) {
+        return;
+      }
+
+      _this.removeTodo(+target.parentElement.id);
+    };
+
+    this.completeAllEvent = function (e) {
+      var target = e.target;
+
+      _this.completeAllTodos(target.checked);
+    };
+
+    this.navEvent = function (e) {
+      var target = e.target;
+
+      if (!(target.id === 'active') && !(target.id === 'completed') && !(target.id === 'all')) {
+        return;
+      }
+
+      _toConsumableArray(_this.$nav.children).forEach(function (navItem) {
+        return navItem.classList.remove('active');
+      });
+
+      target.classList.add('active');
+      _this.state = target.id;
+
+      _this.render();
+    };
+
+    this.$inputTodo.addEventListener('keyup', this.addEvent);
+    this.$todos.addEventListener('change', this.completeEvent);
+    this.$todos.addEventListener('click', this.removeEvent);
+    this.$completeAll.addEventListener('click', this.completeAllEvent);
+    this.$clearCompleted.addEventListener('click', this.clearCompletedTodos);
+    this.$nav.addEventListener('click', this.navEvent);
+  }
+
+  _createClass(TodoList, [{
+    key: "render",
+    value: function render(resTodo) {
+      var _this2 = this;
+
+      if (resTodo) {
+        this.todos = resTodo;
+      }
+
+      var filterdTodos = this.todos.filter(function (_ref) {
+        var completed = _ref.completed;
+
+        if (_this2.state === 'all') {
+          return true;
+        }
+
+        return _this2.state === 'active' ? !completed : completed;
+      });
+      var html = '';
+      filterdTodos.forEach(function (_ref2) {
+        var id = _ref2.id,
+            content = _ref2.content,
+            completed = _ref2.completed;
+        html += "<li id=\"".concat(id, "\" class=\"todo-item\">\n        <input class=\"custom-checkbox\" type=\"checkbox\" id=\"ck-").concat(id, "\" ").concat(completed ? 'checked' : '', ">\n        <label for=\"ck-").concat(id, "\">").concat(content, "</label>\n        <i class=\"remove-todo far fa-times-circle\"></i>\n        </li>");
+      });
+      this.$todos.innerHTML = html;
+      this.$completedTodos.textContent = "".concat(this.todos.filter(function (_ref3) {
+        var completed = _ref3.completed;
+        return completed;
+      }).length);
+      this.$activeTodos.textContent = "".concat(this.todos.filter(function (_ref4) {
+        var completed = _ref4.completed;
+        return !completed;
+      }).length);
+      this.$spinner.classList.remove('show');
     }
+  }]);
 
-    if (menuFlag === 'all') {
-      html = generateHTML(todos);
-    } else {
-      html = generateHTML(todos.filter(function (_ref2) {
-        var completed = _ref2.completed;
-        return menuFlag === 'active' ? !completed : completed;
-      }));
-    }
+  return TodoList;
+}();
 
-    $todos.innerHTML = html;
-    $completedTodos.textContent = todos.filter(function (_ref3) {
-      var completed = _ref3.completed;
-      return completed;
-    }).length;
-    $activeTodos.textContent = todos.filter(function (_ref4) {
-      var completed = _ref4.completed;
-      return !completed;
-    }).length;
-    $spinner.classList.remove('show');
-  }
-
-  function getResponse(url, payload) {
-    $spinner.classList.add('show');
-    return fetch(url, payload).then(function (res) {
-      return res.json();
-    });
-  }
-
-  function getTodos() {
-    getResponse('/todos').then(render)["catch"](console.log);
-  }
-
-  function generateId() {
-    return todos.length ? Math.max.apply(Math, _toConsumableArray(todos.map(function (todo) {
-      return todo.id;
-    }))) + 1 : 1;
-  }
-
-  function addTodo(content) {
-    getResponse('/todos', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: generateId(),
-        content: content,
-        completed: false
-      })
-    }).then(render)["catch"](console.log);
-  }
-
-  function completeTodo(targetID) {
-    var completed = todos.find(function (todo) {
-      return todo.id === +targetID;
-    });
-    getResponse("/todos/".concat(targetID), {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        completed: !completed
-      })
-    }).then(render)["catch"](console.log);
-  }
-
-  function removeTodo(targetID) {
-    getResponse("/todos/".concat(targetID), {
-      method: 'DELETE'
-    }).then(render)["catch"](console.log);
-  }
-
-  function completeAllTodos(complete) {
-    getResponse('/todos', {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        completed: complete.checked
-      })
-    }).then(render)["catch"](console.log);
-  }
-
-  function clearCompletedTodos() {
-    getResponse('/todos/completed', {
-      method: 'DELETE'
-    }).then(render)["catch"](console.log);
-  }
-
-  window.onload = getTodos;
-  $inputTodo.addEventListener('keyup', function (e) {
-    var content = $inputTodo.value.trim();
-    if (content === '' || e.keyCode !== 13) return;
-    addTodo(content);
-    $inputTodo.value = '';
-  });
-  $todos.addEventListener('change', function (e) {
-    completeTodo(e.target.parentNode.id);
-  });
-  $todos.addEventListener('click', function (e) {
-    if (!e.target.classList.contains('remove-todo')) return;
-    removeTodo(e.target.parentNode.id);
-  });
-  $completeAll.addEventListener('click', function (e) {
-    completeAllTodos(e.target);
-  });
-  $clearCompleted.addEventListener('click', clearCompletedTodos);
-  $nav.addEventListener('click', function (e) {
-    if (!(e.target.id === 'active') && !(e.target.id === 'completed') && !(e.target.id === 'all')) return;
-
-    _toConsumableArray($nav.children).forEach(function (navItem) {
-      return navItem.classList.remove('active');
-    });
-
-    e.target.classList.add('active');
-    menuFlag = e.target.id;
-    render();
-  });
-})();
+window.onload = function () {
+  var todoList = new TodoList();
+  todoList.getTodos();
+};
 
 /***/ }),
 
