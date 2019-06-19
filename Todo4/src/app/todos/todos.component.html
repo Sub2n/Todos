@@ -11,8 +11,8 @@
   </ul>
 
   <ul class="todos">
-    <li *ngFor="let todo of (todos | filter:state)" id="todo.id" class="todo-item">
-      <input class="custom-checkbox" type="checkbox" id="ck-{{todo.id}}" [checked]=todo.completed
+    <li *ngFor="let todo of Todos" id="todo.id" class="todo-item">
+      <input class="custom-checkbox" type="checkbox" id="ck-{{todo.id}}" [checked]="todo.completed"
         (change)="toggleTodo(todo.id)">
       <label for="ck-{{todo.id}}">{{todo.content}}</label>
       <i class="remove-todo far fa-times-circle" (click)="removeTodo(todo.id)"></i>

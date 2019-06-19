@@ -64,4 +64,11 @@ export class TodosComponent implements OnInit {
     if (input.value !== '') this.addTodo(input.value.trim());
     input.value = '';
   }
+
+  get Todos() {
+    if (this.state === 'all') return this.todos;
+    return this.state === 'active'
+      ? this.todos.filter(todo => !todo.completed)
+      : this.todos.filter(todo => todo.completed);
+  }
 }
