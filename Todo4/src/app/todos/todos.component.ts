@@ -8,21 +8,23 @@ import { Todo } from '../todo.interface';
   styleUrls: ['./todos.component.css']
   })
 export class TodosComponent implements OnInit {
-  public todos: Todo[];
+  private _todos: Todo[];
 
-  public states = [
-    { state: 'all', title: 'All' },
-    { state: 'active', title: 'Active' },
-    { state: 'completed', title: 'Completed' }
-  ];
+  public states = [{ state: 'All' }, { state: 'Active' }, { state: 'Completed' }];
 
   public state: string;
+
+  public completedNums: number;
+
+  public uncompletedNums: number;
 
   constructor() {}
 
   ngOnInit() {
     this.todos = [];
-    this.state = 'all';
+    this.state = 'All';
+    this.completedNums = 0;
+    this.uncompletedNums = 0;
   }
 
   generateID() {
@@ -58,18 +60,16 @@ export class TodosComponent implements OnInit {
     input.value = '';
   }
 
-  get completedNums() {
-    return this.todos.filter(({ completed }) => completed).length;
+  get todos() {
+    if (this.state === 'All') return [...this._todos];
+    return this.state === 'Active'
+      ? this._todos.filter(todo => !todo.completed)
+      : this._todos.filter(todo => todo.completed);
   }
 
-  get uncompletedNums() {
-    return this.todos.filter(({ completed }) => !completed).length;
-  }
-
-  get Todos() {
-    if (this.state === 'all') return this.todos;
-    return this.state === 'active'
-      ? this.todos.filter(todo => !todo.completed)
-      : this.todos.filter(todo => todo.completed);
+  set todos(todos: Todo[]) {
+    this._todos = todos;
+    this.completedNums = this.todos.filter(({ completed }) => completed).length;
+    this.uncompletedNums = this.todos.filter(({ completed }) => !completed).length;
   }
 }
