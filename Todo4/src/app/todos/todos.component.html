@@ -2,54 +2,38 @@
   <h1 class="title">Todos</h1>
   <div class="ver">4.0</div>
 
-  <input
-    class="input-todo"
-    placeholder="What needs to be done?"
-    autofocus
-    (keyup.enter)="addEvent($event.target)"
-  />
+  <input class="input-todo" placeholder="What needs to be done?" autofocus (keyup.enter)="addEvent($event.target)" />
 
-  <ul class="nav" (click)="activeState($event.target.id)">
-    <li
-      id="{{ status.state }}"
-      *ngFor="let status of states"
-      [class.active]="state == status.state"
-      #status.state
-    >
-      {{ status.state }}
+  <ul class="nav">
+    <li *ngFor="let navItem of navItems" [class.active]="navState == navItem" (click)="activeState(navItem)">
+      {{ navItem }}
     </li>
   </ul>
 
-  <ul class="todos">
-    <li *ngFor="let todo of todos" id="todo.id" class="todo-item">
-      <input
-        class="custom-checkbox"
-        type="checkbox"
-        id="ck-{{ todo.id }}"
-        [checked]="todo.completed"
-        (change)="toggleTodo(todo.id)"
-      />
+  <ul class="todos" *ngIf="todos; else loading">
+    <li *ngFor="let todo of (todos | filter: navState)" id="todo.id" class="todo-item">
+      <input class="custom-checkbox" type="checkbox" id="ck-{{ todo.id }}" [checked]="todo.completed"
+        (change)="toggleTodo(todo.id)" />
       <label for="ck-{{ todo.id }}">{{ todo.content }}</label>
-      <i
-        class="remove-todo far fa-times-circle"
-        (click)="removeTodo(todo.id)"
-      ></i>
+      <i class="remove-todo far fa-times-circle" (click)="removeTodo(todo.id)"></i>
     </li>
   </ul>
+
+  <ng-template #loading>
+    <div class="spinner">
+      <div></div>
+    </div>
+  </ng-template>
+
   <div class="footer">
     <div class="complete-all">
-      <input
-        class="custom-checkbox"
-        type="checkbox"
-        id="ck-complete-all"
-        (change)="completeAll($event.target.checked)"
-      />
+      <input class="custom-checkbox" type="checkbox" id="ck-complete-all"
+        (change)="completeAll($event.target.checked)" />
       <label for="ck-complete-all">Mark all as complete</label>
     </div>
     <div class="clear-completed">
       <button class="btn" (click)="removeCompleted()">
-        Clear completed (<span class="completed-todos">{{ completedNums }}</span
-        >)
+        Clear completed (<span class="completed-todos">{{ completedNums }}</span>)
       </button>
       <strong class="active-todos">{{ uncompletedNums }}</strong> items left
     </div>

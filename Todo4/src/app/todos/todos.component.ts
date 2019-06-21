@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TodosService } from '../todos.service';
+
 import { Todo } from '../todo.interface';
+import { NavItem } from '../nav-item.type';
 
 @Component({
   selector: 'app-todos',
@@ -10,9 +11,9 @@ import { Todo } from '../todo.interface';
 export class TodosComponent implements OnInit {
   private _todos: Todo[];
 
-  public states = [{ state: 'All' }, { state: 'Active' }, { state: 'Completed' }];
+  public navItems: NavItem[] = ['All', 'Active', 'Completed'];
 
-  public state: string;
+  public navState: NavItem;
 
   public completedNums: number;
 
@@ -21,18 +22,29 @@ export class TodosComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.todos = [];
-    this.state = 'All';
+    this.getTodos();
+    this.navState = 'All';
     this.completedNums = 0;
     this.uncompletedNums = 0;
+  }
+
+  // DB에서 todo list 가져온다고 가정
+  getTodos() {
+    setTimeout(() => {
+      this.todos = [
+        { id: 1, content: 'HTML', completed: false },
+        { id: 2, content: 'CSS', completed: true },
+        { id: 3, content: 'JavaScript', completed: false }
+      ];
+    }, 3000);
   }
 
   generateID() {
     return this.todos.length ? Math.max(...this.todos.map(({ id }) => id)) + 1 : 1;
   }
 
-  activeState(acive: string) {
-    this.state = acive;
+  activeState(active: NavItem) {
+    this.navState = active;
   }
 
   addTodo(content: string) {
@@ -60,11 +72,8 @@ export class TodosComponent implements OnInit {
     input.value = '';
   }
 
-  get todos() {
-    if (this.state === 'All') return [...this._todos];
-    return this.state === 'Active'
-      ? this._todos.filter(todo => !todo.completed)
-      : this._todos.filter(todo => todo.completed);
+  get todos(): Todo[] {
+    return this._todos;
   }
 
   set todos(todos: Todo[]) {

@@ -6,8 +6,8 @@ import { Todo } from './todo.interface';
   })
 export class FilterPipe implements PipeTransform {
   transform(todos: Todo[], active: string): any {
-    if (active === 'all') return todos;
-    return active === 'active'
+    if (active === 'All') return todos;
+    return active === 'Active'
       ? todos.filter(todo => !todo.completed)
       : todos.filter(todo => todo.completed);
   }
