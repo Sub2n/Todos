@@ -7,15 +7,9 @@ import { TodosService } from './todos.service';
 import { FilterPipe } from './filter.pipe';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TodosComponent,
-    FilterPipe
-  ],
-  imports: [
-    BrowserModule
-  ],
+  declarations: [AppComponent, TodosComponent, FilterPipe],
+  imports: [BrowserModule],
   providers: [TodosService],
   bootstrap: [AppComponent]
-})
-export class AppModule { }
+  })
+export class AppModule {}
