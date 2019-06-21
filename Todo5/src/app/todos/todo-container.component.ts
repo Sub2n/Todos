@@ -7,14 +7,10 @@ import { NavItem } from './nav-item.type';
   template: `
     <div class="container">
       <h1 class="title">Todos</h1>
-      <div class="ver">4.0</div>
+      <div class="ver">5.0</div>
       <app-todo-form (add)="addTodo($event)"></app-todo-form>
 
-      <app-todo-nav
-        (state)="activeState($event)"
-        [navState]="navState"
-        [navItems]="navItems"
-      ></app-todo-nav>
+      <app-todo-nav (active)="activeState($event)" [navState]="navState"></app-todo-nav>
 
       <app-todo-list
         [todos]="todos"
@@ -27,7 +23,7 @@ import { NavItem } from './nav-item.type';
         [completedNums]="completedNums"
         [uncompletedNums]="uncompletedNums"
         (completeAll)="completeAllTodos($event)"
-        (removeCompleted)="completeAllTodos($event)"
+        (removeCompleted)="removeCompletedTodos($event)"
       ></app-todo-footer>
       <pre>{{ todos | json }}</pre>
     </div>
@@ -61,8 +57,6 @@ import { NavItem } from './nav-item.type';
 export class TodoContainerComponent implements OnInit {
   private _todos: Todo[];
 
-  public navItems: NavItem[] = ['All', 'Active', 'Completed'];
-
   public navState: NavItem;
 
   public completedNums: number;
@@ -86,15 +80,15 @@ export class TodoContainerComponent implements OnInit {
         { id: 2, content: 'CSS', completed: true },
         { id: 3, content: 'JavaScript', completed: false }
       ];
-    }, 3000);
+    }, 2000);
   }
 
   generateID() {
     return this.todos.length ? Math.max(...this.todos.map(({ id }) => id)) + 1 : 1;
   }
 
-  activeState(active: NavItem) {
-    this.navState = active;
+  activeState(activeState: NavItem) {
+    this.navState = activeState;
   }
 
   addTodo(content: string) {

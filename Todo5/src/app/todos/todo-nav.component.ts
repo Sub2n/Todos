@@ -10,7 +10,7 @@ import { NavItem } from './nav-item.type';
       <li
         *ngFor="let navItem of navItems"
         [class.active]="navState == navItem"
-        (click)="state.emit(navItem)"
+        (click)="active.emit(navItem)"
       >
         {{ navItem }}
       </li>
@@ -18,7 +18,7 @@ import { NavItem } from './nav-item.type';
   `,
   styles: [
   `
-      * .nav */ .nav {
+      .nav {
         display: flex;
         margin: 15px;
         list-style: none;
@@ -34,17 +34,13 @@ import { NavItem } from './nav-item.type';
         color: #fff;
         background-color: #23b7e5;
       }
-
-      .todos {
-        margin-top: 20px;
-      }
     `
   ]
   })
 export class TodoNavComponent {
   @Input() navState: NavItem;
 
-  @Input() navItems: NavItem[];
+  @Output() active = new EventEmitter();
 
-  @Output() state = new EventEmitter();
+  public navItems: NavItem[] = ['All', 'Active', 'Completed'];
 }

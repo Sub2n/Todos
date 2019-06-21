@@ -43,7 +43,7 @@ export class TodoFormComponent {
   @Output() add = new EventEmitter();
 
   addEvent(input: HTMLInputElement) {
-    if (input.value !== '') this.add.emit(input.value.trim());
+    if (input.value.trim() !== '') this.add.emit(input.value.trim());
     input.value = '';
   }
 }

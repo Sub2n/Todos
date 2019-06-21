@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, Input, Output, EventEmitter
+  Component, Input, Output, EventEmitter
 } from '@angular/core';
 import { Todo } from './todo.interface';
 import { NavItem } from './nav-item.type';
