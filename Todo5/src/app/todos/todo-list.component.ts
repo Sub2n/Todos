@@ -64,7 +64,6 @@ import { NavItem } from './nav-item.type';
     <input class="custom-checkbox" type="checkbox" id="myId">
     <label for="myId">Content</label>
   */
-
       .custom-checkbox {
         display: none;
       }
@@ -105,7 +104,6 @@ import { NavItem } from './nav-item.type';
         height: 10px;
         background-color: #23b7e5;
       }
-
       /* .remove-todo button */
       .remove-todo {
         display: none;

@@ -65,6 +65,47 @@ import {
         background-color: #e6e6e6;
         border-color: #adadad;
       }
+
+      .custom-checkbox {
+        display: none;
+      }
+
+      .custom-checkbox + label {
+        position: absolute;
+        /* 부모 위치를 기준으로 */
+        top: 50%;
+        left: 15px;
+        transform: translate3d(0, -50%, 0);
+        display: inline-block;
+        width: 90%;
+        line-height: 2em;
+        padding-left: 35px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .custom-checkbox + label:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translate3d(0, -50%, 0);
+        width: 20px;
+        height: 20px;
+        background-color: #fff;
+        border: 1px solid #cfdadd;
+      }
+
+      .custom-checkbox:checked + label:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 6px;
+        transform: translate3d(0, -50%, 0);
+        width: 10px;
+        height: 10px;
+        background-color: #23b7e5;
+      }
     `
   ]
   })
