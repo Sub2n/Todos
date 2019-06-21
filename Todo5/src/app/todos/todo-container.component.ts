@@ -117,7 +117,7 @@ export class TodoContainerComponent implements OnInit {
 
   set todos(todos: Todo[]) {
     this._todos = todos;
-    this.completedNums = this.todos.filter(({ completed }) => completed).length;
-    this.uncompletedNums = this.todos.filter(({ completed }) => !completed).length;
+    this.completedNums = this._todos.filter(({ completed }) => completed).length;
+    this.uncompletedNums = this._todos.filter(({ completed }) => !completed).length;
   }
 }
