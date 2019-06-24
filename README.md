@@ -23,3 +23,7 @@ Todos-3.0 버전
 Todos-4.0 버전
 - Angular로 다시 구현
 - Class화
+
+## 190621 (금)
+Todos-5.0 버전
+- Component 분리
