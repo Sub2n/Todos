@@ -1,0 +1,150 @@
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Todo } from './todo.interface';
+import { NavItem } from './nav-item.type';
+import { environment } from '../../environments/environment';
+
+@Component({
+  selector: 'app-todo-container',
+  template: `
+    <div class="container">
+      <h1 class="title">Todos</h1>
+      <div class="ver">6.0</div>
+      <app-todo-form (add)="addTodo($event)"></app-todo-form>
+
+      <app-todo-nav (active)="activeState($event)" [navState]="navState"></app-todo-nav>
+
+      <app-todo-list
+        [todos]="todos"
+        [navState]="navState"
+        (toggle)="toggleTodo($event)"
+        (remove)="removeTodo($event)"
+      ></app-todo-list>
+
+      <app-todo-footer
+        [completedNums]="completedNums"
+        [uncompletedNums]="uncompletedNums"
+        [allCompleted]="allCompleted"
+        (completeAll)="completeAllTodos($event)"
+        (removeCompleted)="removeCompletedTodos($event)"
+      ></app-todo-footer>
+      <pre>{{ todos | json }}</pre>
+    </div>
+  `,
+  styles: [
+  `
+      .container {
+        max-width: 750px;
+        min-width: 450px;
+        margin: 0 auto;
+        padding: 15px;
+      }
+
+      .title {
+        /* margin: 10px 0; */
+        font-size: 4.5em;
+        font-weight: 100;
+        text-align: center;
+        color: #23b7e5;
+      }
+
+      .ver {
+        font-weight: 100;
+        text-align: center;
+        color: #23b7e5;
+        margin-bottom: 30px;
+      }
+    `
+  ]
+  })
+export class TodoContainerComponent implements OnInit {
+  private _todos: Todo[];
+
+  public apiUrl = environment.apiUrl;
+
+  public navState: NavItem;
+
+  public completedNums: number;
+
+  public uncompletedNums: number;
+
+  public allCompleted: boolean;
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.getTodos();
+    this.navState = 'All';
+    this.completedNums = 0;
+    this.uncompletedNums = 0;
+  }
+
+  // DB에서 todo list 가져온다고 가정
+  getTodos() {
+    this.http.get<Todo[]>(this.apiUrl).subscribe(todos => (this.todos = todos));
+  }
+
+  generateID() {
+    return this.todos.length ? Math.max(...this.todos.map(({ id }) => id)) + 1 : 1;
+  }
+
+  activeState(activeState: NavItem) {
+    this.navState = activeState;
+  }
+
+  addTodo(content: string) {
+    this.http
+      .post<Todo[]>(this.apiUrl, {
+      id: this.generateID(),
+      content,
+      completed: false
+    })
+      .subscribe(todos => (this.todos = todos));
+    // this.todos = [{ id: this.generateID(), content, completed: false }, ...this.todos];
+  }
+
+  toggleTodo(id: number) {
+    this.http
+      .patch<Todo[]>(`${this.apiUrl}/${id}`, {
+      completed: !this.todos.find(todo => todo.id === id).completed
+    })
+      .subscribe(todos => (this.todos = todos));
+    // this.todos = this.todos.map(todo => (todo.id === id ? { ...todo, completed: !todo.completed } : todo));
+  }
+
+  removeTodo(id: number) {
+    this.http.delete<Todo[]>(`${this.apiUrl}/${id}`).subscribe(todos => (this.todos = todos));
+    // this.todos = this.todos.filter(todo => todo.id !== id);
+  }
+
+  completeAllTodos(checked: boolean) {
+    this.http
+      .patch<Todo[]>(this.apiUrl, {
+      completed: checked
+    })
+      .subscribe(todos => (this.todos = todos));
+    // this.todos = this.todos.map(todo => ({ ...todo, completed: checked }));
+  }
+
+  removeCompletedTodos() {
+    this.todos.forEach((todo) => {
+      if (todo.completed) {
+        this.http
+          .delete<Todo[]>(`${this.apiUrl}/${todo.id}`)
+          .subscribe(todos => (this.todos = todos));
+      }
+    });
+    // this.todos = this.todos.filter(({ completed }) => !completed);
+  }
+
+  get todos(): Todo[] {
+    return this._todos;
+  }
+
+  set todos(todos: Todo[]) {
+    this._todos = todos;
+    this.allCompleted = this._todos.every(({ completed }) => completed);
+    this.completedNums = this._todos.filter(({ completed }) => completed).length;
+    this.uncompletedNums = this._todos.filter(({ completed }) => !completed).length;
+  }
+}
