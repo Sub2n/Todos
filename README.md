@@ -27,3 +27,7 @@ Todos-4.0 버전
 ## 190621 (금)
 Todos-5.0 버전
 - Component 분리
+
+## 190628 (금)
+Todos-6.0 버전
+- MongoDB 서버 연동
