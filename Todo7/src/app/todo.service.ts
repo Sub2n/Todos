@@ -8,8 +8,6 @@ import { Todo } from './todos/todo.interface';
   providedIn: 'root'
   })
 export class TodoService {
-  private todos: Todo[];
-
   public apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
