@@ -46,7 +46,10 @@ export class TodoFormComponent {
   public content: string;
 
   addEvent() {
-    if (this.content.trim() !== '') this.add.emit(this.content.trim());
+    const content = this.content && this.content.trim();
     this.content = '';
+
+    if (!content) return;
+    this.add.emit(content);
   }
 }
