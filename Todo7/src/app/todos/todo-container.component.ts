@@ -76,9 +76,8 @@ export class TodoContainerComponent implements OnInit {
     this.uncompletedNums = 0;
   }
 
-  // DB에서 todo list 가져온다고 가정
   getTodos() {
-    this.todoService.getTodos().subscribe(todos => (this.todos = todos));
+    this.todoService.get().subscribe(todos => (this.todos = todos));
   }
 
   generateID() {
@@ -95,24 +94,24 @@ export class TodoContainerComponent implements OnInit {
       content,
       completed: false
     };
-    this.todoService.addTodo(todo).subscribe(todos => (this.todos = todos));
+    this.todoService.add(todo).subscribe(todos => (this.todos = todos));
   }
 
   toggleTodo(id: number) {
     const completed = !this.todos.find(todo => todo.id === id).completed;
-    this.todoService.toggleTodo(id, completed).subscribe(todos => (this.todos = todos));
+    this.todoService.toggle(id, completed).subscribe(todos => (this.todos = todos));
   }
 
   removeTodo(id: number) {
-    this.todoService.removeTodo(id).subscribe(todos => (this.todos = todos));
+    this.todoService.remove(id).subscribe(todos => (this.todos = todos));
   }
 
   completeAllTodos(checked: boolean) {
-    this.todoService.completeAllTodos(checked).subscribe(todos => (this.todos = todos));
+    this.todoService.completeAll(checked).subscribe(todos => (this.todos = todos));
   }
 
   removeCompletedTodos() {
-    this.todoService.removeCompletedTodos().subscribe(todos => (this.todos = todos));
+    this.todoService.removeCompleted().subscribe(todos => (this.todos = todos));
   }
 
   get todos(): Todo[] {

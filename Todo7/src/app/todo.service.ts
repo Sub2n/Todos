@@ -14,27 +14,27 @@ export class TodoService {
 
   constructor(private http: HttpClient) {}
 
-  getTodos(): Observable<Todo[]> {
+  get(): Observable<Todo[]> {
     return this.http.get<Todo[]>(this.apiUrl);
   }
 
-  addTodo(todo: Todo): Observable<Todo[]> {
+  add(todo: Todo): Observable<Todo[]> {
     return this.http.post<Todo[]>(this.apiUrl, todo);
   }
 
-  toggleTodo(id: number, completed: boolean): Observable<Todo[]> {
+  toggle(id: number, completed: boolean): Observable<Todo[]> {
     return this.http.patch<Todo[]>(`${this.apiUrl}/${id}`, { completed });
   }
 
-  removeTodo(id: number): Observable<Todo[]> {
+  remove(id: number): Observable<Todo[]> {
     return this.http.delete<Todo[]>(`${this.apiUrl}/${id}`);
   }
 
-  completeAllTodos(completed: boolean): Observable<Todo[]> {
+  completeAll(completed: boolean): Observable<Todo[]> {
     return this.http.patch<Todo[]>(this.apiUrl, { completed });
   }
 
-  removeCompletedTodos(): Observable<Todo[]> {
+  removeCompleted(): Observable<Todo[]> {
     return this.http.delete<Todo[]>(`${this.apiUrl}/completed`);
   }
 }
