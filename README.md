@@ -51,4 +51,4 @@ Todos-7.0 버전
 
 - Angular Service를 이용해서 Http Request와 Component 기능 분리
 - removeCompletedTodos에서 forEach 쓰지 않고 delete에 /completed 사용
-- getter, setter 사용
+- getter, setter 접근자 사용
