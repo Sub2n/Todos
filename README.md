@@ -2,7 +2,7 @@
 
 ## 기능들
 
-- Enter키로 Todo 추가
+- Input 창에서 Enter키로 Todo 추가
 - Todo 삭제
 - 완료된 Todo와 완료 안 된 Todo 관리
 - 전체 선택 완료 / 해제
