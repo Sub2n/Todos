@@ -1,5 +1,4 @@
-# Todos-1.0
-
+# Todo List
 ## 기능들
 
 - Input 창에서 Enter키로 Todo 추가
